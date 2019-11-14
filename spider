@@ -1,0 +1,23 @@
+#!/usr/bin/python
+# encoding: utf-8
+from __future__ import unicode_literals
+from __future__ import print_function
+from core import *
+import json
+import traceback
+
+driver = init()
+try:
+    login(driver)
+    username = get_username(driver)
+    shops = get_shop_list(driver)
+    orders = []
+    for shop_name in shops:
+        goto_shoplist(driver)
+        print('process shop {}'.format(shop_name))
+        goto_shop(driver, shop_name)
+        orders.extend(get_order_list(driver))
+    write_excel(orders, username, 'youzan_{}.xls'.format(username))
+except:
+    traceback.print_exc()
+driver.quit()
